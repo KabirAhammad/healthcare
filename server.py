@@ -1,13 +1,17 @@
 import speech_recognition as sr
 import webbrowser
 import pyttsx3
+import logging
 
 # Initialize text-to-speech engine once
 engine = pyttsx3.init()
 
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 def speak(text):
     """Speak the provided text."""
-    print(f"Speaking: {text}")  # Debugging log to see what's being spoken
+    logging.info(f"Speaking: {text}")  # Log what's being spoken
     engine.say(text)
     engine.runAndWait()
 
@@ -18,17 +22,17 @@ def take_command():
         with sr.Microphone() as source:
             listener.energy_threshold = 300  # Predefined noise level threshold
             listener.dynamic_energy_threshold = False  # Avoid recalculating noise levels
-            print("Listening...")
+            logging.info("Listening...")
             speak("How can I help you?")
             voice = listener.listen(source, timeout=3, phrase_time_limit=5)
             command = listener.recognize_google(voice).lower()  # Convert to lowercase text
-            print(f"You said: {command}")
+            logging.info(f"You said: {command}")
             return command
     except (sr.WaitTimeoutError, sr.UnknownValueError) as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
         speak("I didn't hear anything or couldn't understand. Please try again.")
     except Exception as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
         speak("An error occurred. Please try again.")
     return ""
 
@@ -45,14 +49,14 @@ def search(query, site="google"):
             speak(f"Searching for information about {query} on the NHS website.")
             nhs_url = f"https://www.nhs.uk/search/results?q={query}"
             webbrowser.open(nhs_url)
-            print(f"Opening NHS results: {nhs_url}")
+            logging.info(f"Opening NHS results: {nhs_url}")
         else:
             speak(f"Searching for {query} on Google.")
             google_url = f"https://www.google.com/search?q={query}"
             webbrowser.open(google_url)
-            print(f"Opening Google results: {google_url}")
+            logging.info(f"Opening Google results: {google_url}")
     except Exception as e:
-        print(f"Error during search: {e}")
+        logging.error(f"Error during search: {e}")
         speak(f"An error occurred while trying to search on {site}. Please check your internet connection.")
 
 def voice_google_search():
@@ -73,5 +77,5 @@ if __name__ == "__main__":
     try:
         voice_google_search()
     except KeyboardInterrupt:
-        print("Program terminated.")
+        logging.info("Program terminated.")
         speak("Goodbye! Have a great day.")
