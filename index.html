@@ -79,7 +79,7 @@
                 console.log('You said:', transcript); // Log recognized command
 
                 // Send recognized command to backend for processing
-                fetch('https://healthcaresystemuk.nw.r.appspot.com', {
+                fetch('https://healthcaresystem.azurewebsites.net/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ command: transcript })
