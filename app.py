@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS  # Import CORS to handle cross-origin requests
 import threading
-import webbrowser  # To open URLs (NHS and Google)
+import webbrowser  # To open URLs
 import server  # Ensure server.py contains the necessary voice assistant logic
 
 # Initialize the Flask application
@@ -26,7 +26,6 @@ def voice_assistant():
     assistant_thread.start()
 
     return jsonify({"status": "Voice assistant triggered"}), 200
-
 
 @app.route('/voice_assistant_process', methods=['POST'])
 def voice_assistant_process():
@@ -72,7 +71,10 @@ def internal_server_error(e):
 if __name__ == '__main__':
     try:
         print("Starting Flask server...")
-        # Allow external access by setting host='0.0.0.0' and running on port 5000 for Azure compatibility
-        app.run(host='0.0.0.0', port=5000, debug=True)
+        # Allow external access by setting host='0.0.0.0' and running on port 5001
+        app.run(host='0.0.0.0', port=5001, debug=True)
     except KeyboardInterrupt:
         print("Server shutting down gracefully.")
+
+        
+        
